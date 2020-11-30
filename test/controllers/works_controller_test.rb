@@ -3,6 +3,10 @@ require "test_helper"
 describe WorksController do
   let(:existing_work) { works(:album) }
 
+  before do
+    perform_login(users(:dan))
+  end
+
   describe "root" do
     it "succeeds with all media types" do
       get root_path
@@ -188,9 +192,7 @@ describe WorksController do
   end
 
   describe "upvote" do
-    before do
-      perform_login(users(:dan))
-    end
+
 
     it "redirects to the work page if no user is logged in" do
     delete logout_path
@@ -199,7 +201,7 @@ describe WorksController do
         post upvote_path(works(:poodr))
       }.wont_change "Vote.count"
 
-      expect(flash[:result_text]).must_equal "You must log in to do that"
+      expect(flash[:result_text]).must_equal "You must be logged in to do that!"
 
     end
 
@@ -230,5 +232,46 @@ describe WorksController do
 
       expect(flash[:result_text]).must_equal "Could not upvote"
     end
+  end
+
+  describe "require login" do
+    it "redirects a guest user who tries to access show page" do
+      delete logout_path
+      get work_path(works(:album).id)
+
+      must_respond_with :redirect
+      expect(flash[:status]).must_equal :failure
+      expect(flash[:result_text]).must_equal "You must be logged in to do that!"
+    end
+
+    it "redirects a guest user who tries to upvote" do
+      delete logout_path
+      expect {
+        post upvote_path(works(:poodr))
+      }.wont_change "Vote.count"
+
+      must_respond_with :redirect
+      expect(flash[:status]).must_equal :failure
+      expect(flash[:result_text]).must_equal "You must be logged in to do that!"
+    end
+
+    it "redirects a guest user who tries to add new work" do
+      delete logout_path
+      get new_work_path
+
+      must_respond_with :redirect
+      expect(flash[:status]).must_equal :failure
+      expect(flash[:result_text]).must_equal "You must be logged in to do that!"
+    end
+
+    it "redirects a guest user who tries to delete a work" do
+      delete logout_path
+      delete work_path(works(:poodr))
+
+      must_respond_with :redirect
+      expect(flash[:status]).must_equal :failure
+      expect(flash[:result_text]).must_equal "You must be logged in to do that!"
+    end
+
   end
 end
