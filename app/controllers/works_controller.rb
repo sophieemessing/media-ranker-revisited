@@ -2,12 +2,22 @@ class WorksController < ApplicationController
   # We should always be able to tell what category
   # of work we're dealing with
   before_action :category_from_work, except: [:root, :index, :new, :create]
-  before_action :require_login, only: [:show, :upvote, :new, :destroy]
+  before_action :require_login, only: [:show, :upvote, :new, :create]
+  before_action :authorized?, only: [:edit, :update, :destroy]
 
   def require_login
     if find_user.nil?
       flash[:status] = :failure
       flash[:result_text] = "You must be logged in to do that!"
+      redirect_back fallback_location: root_path
+      return
+    end
+  end
+
+  def authorized?
+    unless @work.owner(@login_user)
+      flash[:status] = :failure
+      flash[:result_text] = "You are not authorized to do this."
       redirect_back fallback_location: root_path
       return
     end

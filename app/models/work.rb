@@ -15,6 +15,14 @@ class Work < ApplicationRecord
   # our validations are rather strict about what's OK.
   before_validation :fix_category
 
+  def owner(login_user)
+    if login_user && login_user.id == self.user.id
+      return true
+    else
+      return false
+    end
+  end
+
   def self.to_category_hash
     data = {}
     CATEGORIES.each do |cat|
