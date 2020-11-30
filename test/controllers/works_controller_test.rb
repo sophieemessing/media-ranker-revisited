@@ -272,6 +272,79 @@ describe WorksController do
       expect(flash[:status]).must_equal :failure
       expect(flash[:result_text]).must_equal "You must be logged in to do that!"
     end
-
   end
+
+  # describe "Authorization" do
+  #
+  #   before do
+  #     user = perform_login(users(:dan))
+  #   end
+  #
+  #   it "Authorized merchants can access edit page for their own works" do
+  #     get edit_work_path(works(:album).id)
+  #
+  #     must_respond_with :success
+  #   end
+  #
+  #   it "Should not render edit page for invalid work ID" do
+  #     get edit_work_path(-1)
+  #     must_respond_with :not_found
+  #   end
+  #
+  #   it "Authorized merchants can update their own works" do
+  #     update_hash = {
+  #         work: {
+  #             title: "bookie",
+  #             category: "book"
+  #         }
+  #     }
+  #
+  #     patch work_path(works(:album).id),  params: update_hash
+  #
+  #     updated_work = Product.find_by(name: "bookie")
+  #     expect(updated_work.name).must_equal "bookie"
+  #     expect(updated_work).must_equal works(:album)
+  #
+  #     must_respond_with :found
+  #     must_redirect_to work_path(works(:album).id)
+  #   end
+  #
+  #   it "will not update work with invalid params" do
+  #     patch work_path(works(:album).id), params: { work: { name: "" } }
+  #
+  #     must_respond_with :bad_request
+  #   end
+  #
+  #   it "Authorized merchants can delete their own works" do
+  #
+  #     expect{
+  #       delete work_path(works(:album).id)
+  #     }.must_change "Work.count", -1
+  #
+  #     deleted_work = Work.find_by(name: "album")
+  #
+  #     expect(deleted_work).must_be_nil
+  #     must_respond_with :redirect
+  #
+  #   end
+  #
+  #   it "users can't access edit page for works they don't own" do
+  #
+  #     get edit_work_path(works(:another_album).id) # valentine's work
+  #     expect(flash[:status]).must_equal :failure
+  #     must_respond_with :redirect
+  #   end
+  #
+  #   it "merchants can't delete works they don't own" do
+  #     k_work_count = users(:kari).works.count
+  #
+  #     # dan tries to delete kari's work
+  #
+  #     expect{
+  #       delete work_path(works(:another_album).id)
+  #     }.wont_change k_work_count
+  #
+  #     must_respond_with :redirect
+  #   end
+  # end
 end

@@ -15,8 +15,8 @@ class Work < ApplicationRecord
   # our validations are rather strict about what's OK.
   before_validation :fix_category
 
-  def owner(login_user)
-    if login_user && login_user.id == self.user.id
+  def owner(user)
+    if user && user == self.user
       return true
     else
       return false

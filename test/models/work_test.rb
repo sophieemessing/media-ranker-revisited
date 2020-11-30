@@ -143,4 +143,28 @@ describe Work do
       expect(Work.top_ten("movie").length).must_equal 10
     end
   end
+
+  # describe "owner method" do
+  #   it "will authenticate a user as the owner of a work and return true" do
+  #     skip
+  #     user = users(:dan)
+  #     work = works(:album)
+  #     result = work.owner(user)
+  #     expect(result).must_equal true
+  #   end
+  #
+  #   it "will not authenticate a guest user not logged in" do
+  #     user = nil
+  #     work = works(:album)
+  #     result = work.owner(user)
+  #     expect(result).must_equal false
+  #   end
+  #
+  #   it "will return false if the user is not the owner of a product" do
+  #     user = users(:kari)
+  #     work = works(:album)
+  #     result = work.owner(user)
+  #     expect(result).must_equal false
+  #   end
+  # end
 end
