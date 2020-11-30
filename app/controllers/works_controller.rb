@@ -29,7 +29,7 @@ class WorksController < ApplicationController
   end
 
   def create
-    @work = Work.new(media_params)
+    @work = @login_user.works.new(media_params)
     @media_category = @work.category
     if @work.save
       flash[:status] = :success
@@ -93,7 +93,7 @@ class WorksController < ApplicationController
   private
 
   def media_params
-    params.require(:work).permit(:title, :category, :creator, :description, :publication_year)
+    params.require(:work).permit(:title, :category, :creator, :description, :publication_year, :user_id)
   end
 
   def category_from_work
