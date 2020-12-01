@@ -16,11 +16,7 @@ class Work < ApplicationRecord
   before_validation :fix_category
 
   def owner(user)
-    if user && user == self.user
-      return true
-    else
-      return false
-    end
+    return user && user.id == self.user_id
   end
 
   def self.to_category_hash
